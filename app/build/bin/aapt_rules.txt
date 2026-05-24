@@ -1,0 +1,6 @@
+# view AndroidManifest.xml #generated:45
+-keep class com.dvlmods.vip.Launcher { <init>(...); }
+
+# view AndroidManifest.xml #generated:29
+-keep class com.dvlmods.vip.MainActivity { <init>(...); }
+

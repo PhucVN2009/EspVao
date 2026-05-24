@@ -1,0 +1,30 @@
+ProGuard, version 6.0.3
+ProGuard is released under the GNU General Public License. You therefore
+must ensure that programs that link to it (a, com.a4455jkjh.d, ...)
+carry the GNU General Public License as well. Alternatively, you can
+apply for an exception with the author of ProGuard.
+Reading input...
+Reading program directory [/storage/emulated/0/AndroidIDEProjects/32Bit OWM/app/build/bin/classesrelease_proguard]
+Reading library jar [/data/data/com.aide.ui.fagmmmu.kotlin/no_backup/.aide/android.jar]
+Initializing...
+Note: the configuration refers to the unknown class 'com.google.vending.licensing.ILicensingService'
+Note: the configuration refers to the unknown class 'com.android.vending.licensing.ILicensingService'
+Note: the configuration refers to the unknown class 'android.support.annotation.Keep'
+Note: the configuration refers to the unknown class 'android.support.annotation.Keep'
+Note: the configuration refers to the unknown class 'android.support.annotation.Keep'
+Note: the configuration refers to the unknown class 'android.support.annotation.Keep'
+Note: the configuration refers to the unknown class 'android.support.annotation.Keep'
+Note: the configuration refers to the unknown class 'androidx.constraintlayout.widget.ConstraintLayout'
+Note: the configuration refers to the unknown class 'com.idragon.cheats.MainActivity'
+Note: there were 9 references to unknown classes.
+      You should check your configuration for typos.
+      (http://proguard.sourceforge.net/manual/troubleshooting.html#unknownclass)
+Ignoring unused library classes...
+  Original number of library classes: 8253
+  Final number of library classes:    139
+Printing kept classes, fields, and methods...
+Shrinking...
+Printing usage to [/storage/emulated/0/AndroidIDEProjects/32Bit OWM/app/build/bin/proguard.usage.txt]...
+Removing unused program classes and class elements...
+  Original number of program classes: 13
+  Final number of program classes:    0

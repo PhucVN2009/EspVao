@@ -1,0 +1,23 @@
+res path mapping:
+    res/drawable-v24 -> r/a
+    res/drawable -> r/b
+    res/layout -> r/c
+    res/mipmap-anydpi-v26 -> r/d
+    res/mipmap-hdpi-v4 -> r/e
+    res/mipmap-mdpi-v4 -> r/f
+    res/mipmap-xhdpi-v4 -> r/g
+    res/mipmap-xxhdpi-v4 -> r/h
+    res/mipmap-xxxhdpi-v4 -> r/i
+
+
+res id mapping:
+    com.idragon.cheats.R.drawable.ic_launcher_background -> com.idragon.cheats.R.drawable.a
+    com.idragon.cheats.R.drawable.ic_launcher_foreground -> com.idragon.cheats.R.drawable.b
+    com.idragon.cheats.R.drawable.ic_launcher_foreground_1 -> com.idragon.cheats.R.drawable.c
+    com.idragon.cheats.R.mipmap.ic_launcher -> com.idragon.cheats.R.mipmap.a
+    com.idragon.cheats.R.mipmap.ic_launcher_round -> com.idragon.cheats.R.mipmap.b
+    com.idragon.cheats.R.layout.activity_main -> com.idragon.cheats.R.layout.a
+    com.idragon.cheats.R.color.colorPrimary -> com.idragon.cheats.R.color.a
+    com.idragon.cheats.R.color.colorPrimaryDark -> com.idragon.cheats.R.color.b
+    com.idragon.cheats.R.color.colorAccent -> com.idragon.cheats.R.color.c
+    com.idragon.cheats.R.string.app_name -> com.idragon.cheats.R.string.a

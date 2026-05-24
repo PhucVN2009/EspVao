@@ -1,0 +1,10 @@
+com.idragon.cheats.R$color: int colorAccent
+com.idragon.cheats.R$color: int colorPrimary
+com.idragon.cheats.R$color: int colorPrimaryDark
+com.idragon.cheats.R$drawable: int ic_launcher_background
+com.idragon.cheats.R$drawable: int ic_launcher_foreground
+com.idragon.cheats.R$drawable: int ic_launcher_foreground_1
+com.idragon.cheats.R$layout: int activity_main
+com.idragon.cheats.R$mipmap: int ic_launcher
+com.idragon.cheats.R$mipmap: int ic_launcher_round
+com.idragon.cheats.R$string: int app_name
