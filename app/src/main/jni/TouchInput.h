@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include "UnityResolve.h"
 #include "ImGui/Call_ImGui.h"
 
@@ -27,10 +28,11 @@ struct Touch {
 
 static Touch (*Input_GetTouch)(int index) = nullptr;
 static int (*Input_get_touchCount)() = nullptr;
-static bool is_init = false;
+// atomic with release on write / acquire on read prevents ARM64 store reordering
+// from making is_init visible before the function pointers are visible
+static std::atomic<bool> is_init{false};
 
 inline void Init() {
-    // Try multiple possible image names
     const char* images[] = {
         "UnityEngine.dll",
         "UnityEngine.CoreModule.dll",
@@ -38,18 +40,31 @@ inline void Init() {
         nullptr
     };
 
+    Touch (*tmp_touch)(int) = nullptr;
+    int (*tmp_count)() = nullptr;
+
     for (int i = 0; images[i] != nullptr; i++) {
-        Input_GetTouch = (Touch (*)(int)) GetMethodOffset(images[i], "UnityEngine", "Input", "GetTouch", 1);
-        Input_get_touchCount = (int (*)()) GetMethodOffset(images[i], "UnityEngine", "Input", "get_touchCount", 0);
-        if (Input_GetTouch && Input_get_touchCount) break;
+        tmp_touch = (Touch (*)(int)) GetMethodOffset(images[i], "UnityEngine", "Input", "GetTouch", 1);
+        tmp_count = (int (*)()) GetMethodOffset(images[i], "UnityEngine", "Input", "get_touchCount", 0);
+        if (tmp_touch && tmp_count) break;
     }
 
-    is_init = (Input_GetTouch != nullptr && Input_get_touchCount != nullptr);
-    __android_log_print(ANDROID_LOG_INFO, "TouchInput", "Init: GetTouch=%p touchCount=%p init=%d", Input_GetTouch, Input_get_touchCount, is_init);
+    // write function pointers before releasing is_init to the render thread
+    Input_GetTouch = tmp_touch;
+    Input_get_touchCount = tmp_count;
+    // release store: all prior writes (Input_GetTouch, Input_get_touchCount) are
+    // guaranteed visible to any thread that does an acquire load on is_init
+    is_init.store(tmp_touch != nullptr && tmp_count != nullptr, std::memory_order_release);
+    __android_log_print(ANDROID_LOG_INFO, "TouchInput", "Init: GetTouch=%p touchCount=%p init=%d",
+        Input_GetTouch, Input_get_touchCount, (int)is_init.load());
 }
 
 inline void Update() {
-    if (!is_init) return;
+    // acquire load pairs with the release store in Init(), ensuring we see all
+    // writes made before is_init was set true
+    if (!is_init.load(std::memory_order_acquire)) return;
+    // belt-and-suspenders: never call through a null pointer
+    if (!Input_GetTouch || !Input_get_touchCount) return;
 
     if (ImGui::GetCurrentContext() == nullptr) return;
     ImGuiIO& io = ImGui::GetIO();
