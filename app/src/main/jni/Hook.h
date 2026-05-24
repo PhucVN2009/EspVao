@@ -780,12 +780,27 @@ void ESPUpdateResponse(void *instance) {
     }
 
     // Fallback: try ActorManager (ActorLinker layer) if LGameActorMgr
-    // unavailable
+    // unavailable. Only attempt when in a match (LGameActorMgr was set at
+    // least once OR camp was detected) to avoid crashing in lobby where
+    // KyriosFramework.get_actorManager may throw NullReferenceException.
     bool usingActorLinkerFallback = false;
-    if (!heroListRaw) {
-      void *mgr = get_actorManager ? get_actorManager() : nullptr;
+    static bool g_hadMatch = false;
+    if (LGameActorMgr || campDetected) g_hadMatch = true;
+    if (!heroListRaw && g_hadMatch) {
+      void *mgr = nullptr;
+      if (get_actorManager) {
+        try {
+          mgr = get_actorManager();
+        } catch (...) {
+          mgr = nullptr;
+        }
+      }
       if (mgr && GetAllHeros_ActorManager) {
-        heroListRaw = (void *)GetAllHeros_ActorManager(mgr);
+        try {
+          heroListRaw = (void *)GetAllHeros_ActorManager(mgr);
+        } catch (...) {
+          heroListRaw = nullptr;
+        }
         usingActorLinkerFallback = true;
       }
     }
