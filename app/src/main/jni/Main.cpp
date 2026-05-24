@@ -327,7 +327,7 @@ ImGui::Combo("##ddd", (int*)&Type, "Tắt\0Win\0Lose\0");
                     ImGui::BeginChild(OBFUSCATE("##ChildTab5"), ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), false);
 
                     ImGui::Text(OBFUSCATE("Version: 2.3 Release - Patch: 1.62.1.4"));
-                    ImGui::Text(OBFUSCATE("Auto-Update via UnityInline.h"));
+                    ImGui::Text(OBFUSCATE("Auto-Update via UnitySDK.h"));
 
                     ImGui::EndChild();
                 }
