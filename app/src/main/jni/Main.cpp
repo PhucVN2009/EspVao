@@ -16,6 +16,7 @@
 #include <chrono>
 #include <iomanip>
 #include "login.h"
+#include "AntiTamperBypass.h"
 static bool keyLoaded = true;
 static bool isLogin = true;
 static bool showLoginSuccess = false;
@@ -449,7 +450,12 @@ void *Init_Thread(void *) {
 		il2cppMap = KittyMemory::getLibraryBaseMap("libil2cpp.so");
 		sleep(1);
 	}
-	
+
+    // Re-apply bypass here in case Install() in JNI_OnLoad ran before the flag
+    // was set, and also to catch any re-invocation of UnmapOpenFlagRuntime.
+    AntiTamper::Install();
+    AntiTamper::EnsureFlagZero();
+
     InitUnityResolve();
     TouchInput::Init();
 
@@ -582,6 +588,10 @@ JNI_OnLoad(JavaVM *vm, void * reserved) {
     Tools::Hook((void *) DobbySymbolResolver(OBFUSCATE("/system/lib/libandroid.so"), OBFUSCATE("ANativeWindow_getWidth")), (void *) _ANativeWindow_getWidth, (void **) &orig_ANativeWindow_getWidth);
     Tools::Hook((void *) DobbySymbolResolver(OBFUSCATE("/system/lib/libandroid.so"), OBFUSCATE("ANativeWindow_getHeight")), (void *) _ANativeWindow_getHeight, (void **) &orig_ANativeWindow_getHeight);
     Tools::Hook((void *) DobbySymbolResolver(OBFUSCATE("/system/lib/libEGL.so"), OBFUSCATE("eglSwapBuffers")), (void *) _eglSwapBuffers, (void **) &orig_eglSwapBuffers);
+
+    // libil2cpp.so is already loaded at this point; zero the anti-tamper flag
+    // before Init_Thread installs IL2CPP method hooks.
+    AntiTamper::Install();
 
 	pthread_t myThread;
 	pthread_create(&myThread, NULL, Init_Thread, NULL);
